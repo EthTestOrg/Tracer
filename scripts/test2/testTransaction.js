@@ -5,11 +5,9 @@ const ABI = ARTIFACT.abi;
 
 async function main() {
   const [sender, receiver] = await ethers.getSigners();
-  console.log("\n\nsender\n\n",sender);
-  console.log("\n\nreceiver\n\n",sender);
   console.log("Before");
-  console.log(ethers.utils.formatEther(await sender.getBalance()));
-  console.log(ethers.utils.formatEther(await receiver.getBalance()));
+  console.log("sender "  ,ethers.utils.formatEther(await sender.getBalance()));
+  console.log("receiver ",ethers.utils.formatEther(await receiver.getBalance()));
   const tx = await sender.sendTransaction({
     to: receiver.address,
     value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
@@ -18,15 +16,11 @@ async function main() {
   console.log("EtherTransaction", tx);
 
   console.log("After");
-  console.log(ethers.utils.formatEther(await sender.getBalance()));
-  console.log(ethers.utils.formatEther(await receiver.getBalance()));
+  console.log("sender "  ,ethers.utils.formatEther(await sender.getBalance()));
+  console.log("receiver ",ethers.utils.formatEther(await receiver.getBalance()));
 
-  // console.log(Tracer);
- // const tracer = new Tracer('http://localhost:8545');
-  // Generates Empty trace ???
- // await tracer.process(tx);
- // console.log("Ether Transfer",tracer.parsedTrace);
-// ******************************************************************
+
+ /******************************************************************/
 
 
   const Greeter = await ethers.getContractFactory("Greeter");
