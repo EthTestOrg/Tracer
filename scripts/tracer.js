@@ -151,7 +151,6 @@ const processTrace = async (transactionHash, steps) => {
 
                 // await storeContractData(userId, workspace, step.address, contractData);
                 // contractRef = getContractRef(userId, workspace, step.address);
-                console.log("contract data", contractData);
                 contractRef = contractData;
             }
 

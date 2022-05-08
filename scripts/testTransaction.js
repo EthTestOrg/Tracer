@@ -42,13 +42,13 @@ async function main() {
 
   console.log("setGreetingTransaction", setGreetingTx);
 
-  const transactionMethodDetails = getTransactionMethodDetails(setGreetingTx, ABI);
-  console.log("transactionMethodDetails", transactionMethodDetails);
-
+  
   await tracer.process(setGreetingTx);
   console.log("setGreetingTx parsedTrace",tracer.parsedTrace);
   await tracer.saveTrace();
-
+  
+  const transactionMethodDetails = getTransactionMethodDetails(setGreetingTx, ABI);
+  console.log("transactionMethodDetails", transactionMethodDetails);
 
 }
 
