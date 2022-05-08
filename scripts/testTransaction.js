@@ -1,5 +1,7 @@
 const hre = require("hardhat");
-const {Tracer} = require("./tracer");
+const {Tracer,  getTransactionMethodDetails} = require("./tracer");
+const ARTIFACT = require("../artifacts/contracts/Greeter.sol/Greeter.json");
+const ABI = ARTIFACT.abi;
 
 async function main() {
     const owner = await ethers.getSigner();
@@ -40,8 +42,16 @@ async function main() {
   await setGreetingTx.wait();
 
   console.log("setGreetingTransaction", setGreetingTx);
+
+
+
+
   await tracer.process(setGreetingTx);
   console.log("setGreetingTx Trace",tracer.parsedTrace);
+  await tracer.saveTrace();
+
+  const transactionMethodDetails = getTransactionMethodDetails(setGreetingTx, ABI);
+  console.log("transactionMethodDetails", transactionMethodDetails)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
