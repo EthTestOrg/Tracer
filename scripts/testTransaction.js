@@ -2,9 +2,11 @@ const hre = require("hardhat");
 const {Tracer} = require("./tracer");
 
 async function main() {
-
+    const owner = await ethers.getSigner();
+    console.log(owner);
   const [sender, receiver] = await ethers.getSigners();
-
+  console.log("\n\nsender\n\n",sender);
+  console.log("\n\nreceiver\n\n",sender);
   console.log("Before");
   console.log(ethers.utils.formatEther(await sender.getBalance()));
   console.log(ethers.utils.formatEther(await receiver.getBalance()));
