@@ -119,6 +119,50 @@ const parseTrace = async (from, trace, provider) => {
     return parsedOps
 };
 
+const sanitize = (obj) => {
+    return Object.fromEntries(
+        Object.entries(obj)
+            .filter(([_, v]) => v != null)
+            .map(([_, v]) => {
+                if (typeof v == 'string' && v.length == 42 && v.startsWith('0x'))
+                    return [_, v.toLowerCase()];
+                else
+                    return [_, v];
+            })
+    );
+};
+
+
+// const processTrace = async (userId, workspace, transactionHash, steps) => {
+const processTrace = async (transactionHash, steps) => {
+    const trace = [];
+    for (const step of steps) {
+        if (['CALL', 'CALLCODE', 'DELEGATECALL', 'STATICCALL', 'CREATE', 'CREATE2'].indexOf(step.op.toUpperCase()) > -1) {
+            let contractRef;
+
+            // Cansync is if user is premium or has not exceeded contract limit
+            // const canSync = await canUserSyncContract(userId, workspace);
+            const canSync = true;
+            if (canSync) {
+                const contractData = sanitize({
+                    address: step.address.toLowerCase(),
+                    hashedBytecode: step.contractHashedBytecode
+                });
+
+                // await storeContractData(userId, workspace, step.address, contractData);
+                // contractRef = getContractRef(userId, workspace, step.address);
+                console.log("contract data", contractData);
+                contractRef = contractData;
+            }
+
+            trace.push(sanitize({ ...step, contract: contractRef }));
+        }
+    }
+    console.log(`Processed Trace of ${transactionHash} is \n`, trace);
+    // await storeTrace(userId, workspace, transactionHash, trace);
+};
+
+
 class Tracer {
     constructor(server) {
         if (!server) throw '[Tracer] Missing parameter';
@@ -138,9 +182,9 @@ class Tracer {
         }
     }
 
-    async saveTrace(userId, workspace) {
+    async saveTrace() {
         try {
-            await processTrace(userId, workspace, this.transaction.hash, this.parsedTrace);
+            await processTrace(this.transaction.hash, this.parsedTrace);
         } catch(error) {
             console.log(error);
         }

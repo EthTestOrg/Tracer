@@ -23,6 +23,7 @@ async function main() {
   const tracer = new Tracer('http://localhost:8545');
   // Generates Empty trace ???
   await tracer.process(tx);
+  await tracer.saveTrace();
   console.log("Ether Transfer",tracer.parsedTrace);
 // ******************************************************************
 
@@ -39,7 +40,8 @@ async function main() {
 
   console.log("setGreetingTransaction", setGreetingTx);
   await tracer.process(setGreetingTx);
-  console.log("setGreetingTx Trace",tracer.parsedTrace);
+  console.log("setGreetingTx parsedTrace",tracer.parsedTrace);
+  await tracer.saveTrace();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
