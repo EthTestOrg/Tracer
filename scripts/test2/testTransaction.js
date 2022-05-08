@@ -1,6 +1,6 @@
 const hre = require("hardhat");
 const {traceTransaction, getTransactionMethodDetails} = require("./parseTrace");
-const ARTIFACT = require("../artifacts/contracts/Greeter.sol/Greeter.json");
+const ARTIFACT = require("../../artifacts/contracts/Greeter.sol/Greeter.json");
 const ABI = ARTIFACT.abi;
 
 async function main() {
