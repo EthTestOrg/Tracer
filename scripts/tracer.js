@@ -162,6 +162,42 @@ const processTrace = async (transactionHash, steps) => {
     // await storeTrace(userId, workspace, transactionHash, trace);
 };
 
+const getTransactionMethodDetails = (transaction, abi) => {
+    const jsonInterface = new ethers.utils.Interface(abi);
+    const parsedTransactionData = jsonInterface.parseTransaction(transaction);
+    const fragment = parsedTransactionData.functionFragment;
+
+    const label = [`${fragment.name}(`];
+    const inputsLabel = [];
+    for (let i = 0; i < fragment.inputs.length; i ++) {
+        const input = fragment.inputs[i];
+        const param = [];
+        param.push(input.type)
+        if (input.name)
+            param.push(` ${input.name}`);
+        if (parsedTransactionData.args[i])
+            param.push(`: ${parsedTransactionData.args[i]}`)
+        inputsLabel.push(param.join(''));
+    }
+
+    if (inputsLabel.length > 1)
+        label.push('\n\t');
+
+    label.push(inputsLabel.join(',\n\t'));
+
+    if (inputsLabel.length > 1)
+        label.push('\n');
+
+    label.push(')');
+
+    return {
+        name: parsedTransactionData.name,
+        label: label.join(''),
+        signature: `${fragment.name}(` + fragment.inputs.map((input) => `${input.type} ${input.name}`).join(', ') + ')'
+    };
+};
+
+
 
 class Tracer {
     constructor(server) {
@@ -193,4 +229,5 @@ class Tracer {
 
 module.exports = {
     Tracer: Tracer,
+    getTransactionMethodDetails: getTransactionMethodDetails,
 }
