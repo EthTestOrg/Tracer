@@ -1,7 +1,11 @@
 # Basic Sample Hardhat Project
 
 ```shell
-npx hardhat run scripts/testTransaction.js
+Test1
+npx hardhat run scripts/test1/testTransaction.js
+
+Test2
+npx hardhat run scripts/test2/testTransaction.js
 ```
 
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
