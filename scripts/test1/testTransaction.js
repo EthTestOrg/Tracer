@@ -41,7 +41,11 @@ async function main() {
 
   await tracer.process(setGreetingTx);
   console.log("setGreetingTx parsedTrace",tracer.parsedTrace);
-  await tracer.saveTrace();
+  const trace = await tracer.saveTrace();
+
+  const jsonInterface = new ethers.utils.Interface(ABI);
+  const transactionDescription = jsonInterface.parseTransaction({ data: trace[0].input });
+  console.log("transactionDescription",transactionDescription);
 
   const transactionMethodDetails = getTransactionMethodDetails(setGreetingTx, ABI);
   console.log("transactionMethodDetails", transactionMethodDetails)

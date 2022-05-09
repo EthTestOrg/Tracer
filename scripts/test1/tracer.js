@@ -158,6 +158,7 @@ const processTrace = async (transactionHash, steps) => {
         }
     }
     console.log(`Processed Trace of ${transactionHash} is \n`, trace);
+    return trace;
     // await storeTrace(userId, workspace, transactionHash, trace);
 };
 
@@ -208,6 +209,7 @@ class Tracer {
         try {
             this.transaction = transaction;
             const rawTrace = await this.provider.send('debug_traceTransaction', [transaction.hash, {}]);
+            console.log("rawTrace ", rawTrace);
             this.parsedTrace = await parseTrace(transaction.from, rawTrace, this.provider);
         } catch(error) {
             if (error.error && error.error.code == '-32601')
@@ -219,12 +221,14 @@ class Tracer {
 
     async saveTrace() {
         try {
-            await processTrace(this.transaction.hash, this.parsedTrace);
+            return await processTrace(this.transaction.hash, this.parsedTrace);
         } catch(error) {
             console.log(error);
         }
     }
 }
+
+const zeroXify =  function(input) { return input.startsWith('0x') ? input : `0x${input}` }
 
 module.exports = {
     Tracer: Tracer,
